@@ -1,27 +1,38 @@
 import React, { useEffect, useState } from "react";
-import Suraj from "../components/images/Surajj.jpeg";
-import Ashish from "../components/images/aboutpic.png";
-
-import { useHistory } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
 
 const About = () => {
+  const [userData, setUserData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    message: "",
+    age: "",
+    address: "",
+    file: "",
+  });
   const history = useHistory();
-  const [userData, setUserData] = useState({});
 
-  const callAboutPage = async () => {
+  const userContact = async () => {
     try {
-      const res = await fetch("/about", {
+      const res = await fetch("/getdata", {
         method: "GET",
         headers: {
-          Accept: "appllication/json",
           "Content-Type": "application/json",
         },
-        credentials: "include",
       });
 
       const data = await res.json();
       console.log(data);
-      setUserData(data);
+      setUserData({
+        ...userData,
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        age: data.age,
+        address: data.address,
+        file: data.file,
+      });
 
       if (!res.status === 200) {
         const error = new Error(res.error);
@@ -29,216 +40,148 @@ const About = () => {
       }
     } catch (err) {
       console.log(err);
-      history.push("/login");
     }
   };
 
   useEffect(() => {
-    callAboutPage();
+    userContact();
   }, []);
 
+  // we are storing data in states
+
+  const handleInputs = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+
+    setUserData({ ...userData, [name]: value });
+  };
+
+  //  send the data to backend
+
+  const contactForm = async (e) => {
+    alert("User Added Successfully");
+    history.push("/");
+    e.preventDefault();
+
+    const { name, email, phone, message, age, address, file } = userData;
+
+    const res = await fetch("/contact", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name,
+        email,
+        phone,
+        message,
+        age,
+        address,
+        file,
+      }),
+    });
+
+    const data = await res.json();
+
+    if (!data) {
+      console.log("message not send ");
+    } else {
+      alert("Message Send");
+      setUserData({ ...userData, message: "" });
+    }
+  };
   return (
     <>
-      <div className="container emp-profile">
-        <form method="GET">
+      <div className="contact_form">
+        <div className="container">
           <div className="row">
-            <div className="col-md-4">
-              <div className="profile-img">
-                <img
-                  src={userData.name === "Suraj Yadav" ? Suraj : Ashish}
-                  alt="Suraj"
-                />
-              </div>
-            </div>
+            <div className="col-lg-10 offset-lg-1">
+              <div className="contact_form_container py-5">
+                <div className="contact_form_title">ADD USER</div>
+                <form method="POST" id="contact_form">
+                  <div className="contact_form_inputs d-flex flex-md-row flex-column justify-content-between align-items-between">
+                    <input
+                      type="text"
+                      id="contact_form_name"
+                      className="contact_form_name input_field"
+                      name="name"
+                      value={userData.name}
+                      onChange={handleInputs}
+                      placeholder="Your Name"
+                      required
+                    />
 
-            <div className="col-md-6">
-              <div className="profile-head">
-                <h5>{userData.name}</h5>
-                <h6>{userData.work}</h6>
-                <p className="profile-rating mt-3 mb-5">
-                  RANKINGS: <span> 1/10 </span>
-                </p>
+                    <input
+                      type="email"
+                      id="contact_form_email"
+                      className="contact_form_email input_field"
+                      name="email"
+                      value={userData.email}
+                      onChange={handleInputs}
+                      placeholder="Your Email"
+                      required
+                    />
 
-                <ul className="nav nav-tabs" role="tablist">
-                  <li className="nav-item">
-                    <a
-                      className="nav-link active"
-                      id="home-tab"
-                      data-toggle="tab"
-                      href="#home"
-                      role="tab"
-                      aria-controls="home"
-                      aria-selected="true"
+                    <input
+                      type="number"
+                      id="contact_form_phone"
+                      className="contact_form_phone input_field"
+                      name="phone"
+                      value={userData.phone}
+                      onChange={handleInputs}
+                      placeholder="Your Phone Number"
+                      required
+                    />
+                  </div>
+                  <div className="contact_form_inputs d-flex flex-md-row flex-column justify-content-between align-items-between">
+                    <input
+                      type="text"
+                      id="contact_form_name"
+                      className="contact_form_name input_field"
+                      name="age"
+                      value={userData.age}
+                      onChange={handleInputs}
+                      placeholder="Age"
+                      required
+                    />
+
+                    <input
+                      type="email"
+                      id="contact_form_email"
+                      className="contact_form_email input_field"
+                      name="address"
+                      value={userData.address}
+                      onChange={handleInputs}
+                      placeholder="Address"
+                      required
+                    />
+
+                    <input
+                      type="file"
+                      id="contact_form_phone"
+                      className="contact_form_phone input_field"
+                      name="file"
+                      value={userData.file}
+                      onChange={handleInputs}
+                      placeholder=""
+                      required
+                    />
+                  </div>
+
+                  <div className="contact_form_button">
+                    <button
+                      type="submit"
+                      className="button contact_submit_button"
+                      onClick={contactForm}
                     >
-                      About
-                    </a>
-                  </li>
-                  <li className="nav-item">
-                    <a
-                      className="nav-link"
-                      id="profile-tab"
-                      data-toggle="tab"
-                      href="#profile"
-                      role="tab"
-                      aria-controls="profile"
-                      aria-selected="false"
-                    >
-                      Timeline
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <div className="col-md-2">
-              <input
-                type="submit"
-                className="profile-edit-btn"
-                name="btnAddMore"
-                value="Edit Profile"
-              />
-            </div>
-          </div>
-
-          <div className="row">
-            {/* left side url  */}
-            <div className="col-md-4">
-              <div className="profile-work">
-                <p> WORK LINK</p>
-                <a href="" target="_Suraj">
-                  Youtube
-                </a><br />
-                <br />
-                <a href="" target="_Suraj">
-                  Instagram
-                </a><br />
-                <br />
-                <a href="" target="_Suraj">
-                  sarry7045
-                </a><br />
-                <br />
-                <a href="" target="_Suraj">
-                  SurajYadavMERN
-                </a><br />
-                <br />
-                <a href="" target="_Suraj">
-                  Web Developer
-                </a><br />
-                <br />
-                <a href="" target="_Suraj">
-                  Canva
-                </a><br />
-                <br />
-                <a href="" target="_Suraj">
-                  Software Engeeneer
-                </a><br />
-                <br />
-              </div>
-            </div>
-
-            {/* right side data toogle  */}
-
-            <div className="col-md-8 pl-5 about-info">
-              <div className="tab-content profile-tab" id="myTabContent">
-                <div
-                  className="tab-pane fade show active"
-                  id="home"
-                  role="tabpanel"
-                  aria-labelledby="home-tab"
-                >
-                  <div className="row">
-                    <div className="col-md-6">
-                      <label>User Id</label>
-                    </div>
-                    <div className="col-md-6">
-                      <p>787865454546</p>
-                    </div>
+                      Submit
+                    </button>
                   </div>
-                  <div className="row mt-3">
-                    <div className="col-md-6">
-                      <label>Name</label>
-                    </div>
-                    <div className="col-md-6 ">
-                      <p>{userData.name}</p>
-                    </div>
-                  </div>
-                  <div className="row mt-3">
-                    <div className="col-md-6">
-                      <label>Email</label>
-                    </div>
-                    <div className="col-md-6">
-                      <p>{userData.email}</p>
-                    </div>
-                  </div>
-                  <div className="row mt-3">
-                    <div className="col-md-6">
-                      <label>Phone</label>
-                    </div>
-                    <div className="col-md-6">
-                      <p>{userData.phone}</p>
-                    </div>
-                  </div>
-                  <div className="row mt-3">
-                    <div className="col-md-6">
-                      <label>Profession</label>
-                    </div>
-                    <div className="col-md-6">
-                      <p>Web Developer</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div
-                  className="tab-pane fade"
-                  id="profile"
-                  role="tabpanel"
-                  aria-labelledby="profile-tab"
-                >
-                  <div className="row">
-                    <div className="col-md-6">
-                      <label>Experience</label>
-                    </div>
-                    <div className="col-md-6">
-                      <p>Fresher</p>
-                    </div>
-                  </div>
-                  <div className="row mt-3">
-                    <div className="col-md-6">
-                      <label>Hourly Rate</label>
-                    </div>
-                    <div className="col-md-6">
-                      <p>50Rs/hr</p>
-                    </div>
-                  </div>
-                  <div className="row mt-3">
-                    <div className="col-md-6">
-                      <label>Total Projects</label>
-                    </div>
-                    <div className="col-md-6">
-                      <p>2</p>
-                    </div>
-                  </div>
-                  <div className="row mt-3">
-                    <div className="col-md-6">
-                      <label>English Level</label>
-                    </div>
-                    <div className="col-md-6">
-                      <p>Normal</p>
-                    </div>
-                  </div>
-                  <div className="row mt-3">
-                    <div className="col-md-6">
-                      <label>Availability</label>
-                    </div>
-                    <div className="col-md-6">
-                      <p>4 months</p>
-                    </div>
-                  </div>
-                </div>
+                </form>
               </div>
             </div>
           </div>
-        </form>
+        </div>
       </div>
     </>
   );

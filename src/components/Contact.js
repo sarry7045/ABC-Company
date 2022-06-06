@@ -1,204 +1,110 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import {
+  TableContainer,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  Paper,
+  Container,
+  Typography,
+  Button,
+} from "@material-ui/core";
+const tableData = [
+  {
+    id: 1,
+    first_name: "Beret",
+    last_name: "Lennard",
+    email: "blennard0@pcworld.com",
+    gender: "Female",
+    ip_address: "213.196.192.52",
+  },
+  {
+    id: 2,
+    first_name: "Tera",
+    last_name: "Choke",
+    email: "tchoke1@theatlantic.com",
+    gender: "Male",
+    ip_address: "101.152.241.70",
+  },
+  {
+    id: 3,
+    first_name: "Lyn",
+    last_name: "Bowart",
+    email: "lbowart2@odnoklassniki.ru",
+    gender: "Male",
+    ip_address: "188.127.126.94",
+  },
+  {
+    id: 4,
+    first_name: "Bert",
+    last_name: "Huckett",
+    email: "bhuckett3@tinypic.com",
+    gender: "Female",
+    ip_address: "247.156.243.148",
+  },
+  {
+    id: 5,
+    first_name: "Drew",
+    last_name: "Jenicke",
+    email: "djenicke4@businessinsider.com",
+    gender: "Male",
+    ip_address: "0.185.35.172",
+  },
+];
 
 const Contact = () => {
-  const [userData, setUserData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    message: "",
-  });
-
-  const userContact = async () => {
-    try {
-      const res = await fetch("/getdata", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      const data = await res.json();
-      console.log(data);
-      setUserData({
-        ...userData,
-        name: data.name,
-        email: data.email,
-        phone: data.phone,
-      });
-
-      if (!res.status === 200) {
-        const error = new Error(res.error);
-        throw error;
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  useEffect(() => {
-    userContact();
-  }, []);
-
-  // we are storing data in states
-
-  const handleInputs = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
-
-    setUserData({ ...userData, [name]: value });
-  };
-
-  //  send the data to backend
-
-  const contactForm = async (e) => {
-    e.preventDefault();
-
-    const { name, email, phone, message } = userData;
-
-    const res = await fetch("/contact", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name,
-        email,
-        phone,
-        message,
-      }),
-    });
-
-    const data = await res.json();
-
-    if (!data) {
-      console.log("message not send ");
-    } else {
-      alert("Message Send");
-      setUserData({ ...userData, message: "" });
-    }
-  };
-
   return (
     <>
-      <div className="contact_info">
-        <div className="container-fluid">
-          <div className="row">
-            <div className="col-lg-10 offset-lg-1">
-              <div className="contact_info_container d-flex flex-lg-row flex-column justify-content-between align-items-between">
-                <div className="contact_info_item d-flex flex-row align-items-center justify-content-start">
-                  <div className="contact_info_image">
-                    <img
-                      src="https://img.icons8.com/office/24/000000/iphone.png"
-                      alt=""
-                    />
-                  </div>
-                  <div className="contact_info_content">
-                    <div className="contact_info_title">Phone</div>
-                    <div className="contact_info_text">+91 7977368668</div>
-                  </div>
-                </div>
-                <div className="contact_info_item d-flex flex-row align-items-center justify-content-start">
-                  <div className="contact_info_image">
-                    <img
-                      src="https://img.icons8.com/ultraviolet/24/000000/filled-message.png"
-                      alt=""
-                    />
-                  </div>
-                  <div className="contact_info_content">
-                    <div className="contact_info_title">Email</div>
-                    <div className="contact_info_text">sarry7045@gmail.com</div>
-                  </div>
-                </div>
-                <div className="contact_info_item d-flex flex-row align-items-center justify-content-start">
-                  <div className="contact_info_image">
-                    <img
-                      src="https://img.icons8.com/ultraviolet/24/000000/map-marker.png"
-                      alt=""
-                    />
-                  </div>
-                  <div className="contact_info_content">
-                    <div className="contact_info_title">Address</div>
-                    <div className="contact_info_text">
-                      Andheri, Mumbai , India
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+      <div>
+        <div className="mx-4 my-2 text-center">
+          <Typography variant="h6">USER LIST</Typography>
         </div>
-      </div>
-
-      {/* contact us form  */}
-
-      <div className="contact_form">
-        <div className="container">
-          <div className="row">
-            <div className="col-lg-10 offset-lg-1">
-              <div className="contact_form_container py-5">
-                <div className="contact_form_title">Get in Touch </div>
-                <form method="POST" id="contact_form">
-                  <div className="contact_form_inputs d-flex flex-md-row flex-column justify-content-between align-items-between">
-                    <input
-                      type="text"
-                      id="contact_form_name"
-                      className="contact_form_name input_field"
-                      name="name"
-                      value={userData.name}
-                      onChange={handleInputs}
-                      placeholder="Your Name"
-                      required
-                    />
-
-                    <input
-                      type="email"
-                      id="contact_form_email"
-                      className="contact_form_email input_field"
-                      name="email"
-                      value={userData.email}
-                      onChange={handleInputs}
-                      placeholder="Your Email"
-                      required
-                    />
-
-                    <input
-                      type="number"
-                      id="contact_form_phone"
-                      className="contact_form_phone input_field"
-                      name="phone"
-                      value={userData.phone}
-                      onChange={handleInputs}
-                      placeholder="Your Phone Number"
-                      required
-                    />
-                  </div>
-
-                  <div className="contact_form_text mt-5">
-                    <textarea
-                      className="text_field contact_form_message"
-                      name="message"
-                      value={userData.message}
-                      onChange={handleInputs}
-                      placeholder="Message"
-                      cols="30"
-                      rows="10"
-                    ></textarea>
-                  </div>
-
-                  <div className="contact_form_button">
-                    <button
-                      type="submit"
-                      className="button contact_submit_button"
-                      onClick={contactForm}
-                    >
-                      Send Message
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
+        <Container className="my-4">
+          <TableContainer component={Paper} sx={{ maxHeight: "300px" }}>
+            <Table aria-label="simple table" stickyHeader>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Id</TableCell>
+                  <TableCell>First Name</TableCell>
+                  <TableCell>Lats Name</TableCell>
+                  <TableCell align="center">Email</TableCell>
+                  <TableCell align="center">Action</TableCell>
+                  <TableCell align="center">Action</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {tableData.map((row) => (
+                  <TableRow
+                    key={row.id}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell>{row.id}</TableCell>
+                    <TableCell>{row.first_name}</TableCell>
+                    <TableCell>{row.last_name}</TableCell>
+                    <TableCell align="center">{row.email}</TableCell>
+                    <TableCell align="center">
+                      <Button
+                        align="center"
+                        variant="contained"
+                        color="primary"
+                      >
+                        Edit
+                      </Button>
+                    </TableCell>
+                    <TableCell align="center">
+                      {" "}
+                      <Button variant="outlined" color="secondary">
+                        Delete
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Container>
       </div>
     </>
   );

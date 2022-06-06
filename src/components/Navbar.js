@@ -29,7 +29,7 @@ const Navbar = () => {
               className="nav-link"
               to="/about"
             >
-              AboutMe
+              Add User
             </NavLink>
           </li>
           <li className="nav-item">
@@ -39,7 +39,7 @@ const Navbar = () => {
               className="nav-link"
               to="/contact"
             >
-              Contact
+              User List
             </NavLink>
           </li>
           <li className="nav-item">
@@ -74,7 +74,7 @@ const Navbar = () => {
               className="nav-link"
               to="/about"
             >
-              AboutMe
+              Add User
             </NavLink>
           </li>
           <li className="nav-item">
@@ -84,7 +84,7 @@ const Navbar = () => {
               className="nav-link"
               to="/contact"
             >
-              Contact
+              User List
             </NavLink>
           </li>
 
@@ -117,8 +117,8 @@ const Navbar = () => {
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
-        <NavLink className="navbar-brand" to="#">
-          <h4>ABC COMPANY</h4>
+        <NavLink className="navbar-brand" to="/">
+          <h4>Data Seers</h4>
         </NavLink>
         <button
           className="navbar-toggler"

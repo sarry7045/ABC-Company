@@ -1,7 +1,5 @@
 import React, { useReducer, createContext } from "react";
 import { Route, Switch } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.css";
-import "./App.css";
 import Navbar from "./components/Navbar";
 import Home from "./components/Home";
 import About from "./components/About";
@@ -10,8 +8,9 @@ import Login from "./components/Login";
 import Signup from "./components/Signup";
 import ErrorPage from "./components/Errorpage";
 import Logout from "./components/Logout";
-
 import { initialState, reducer } from "./reducer/UseReducer";
+import "bootstrap/dist/css/bootstrap.css";
+import "./App.css";
 
 // we create a contextAPI
 export const UserContext = createContext();
